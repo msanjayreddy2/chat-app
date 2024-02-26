@@ -26,23 +26,25 @@ export const login = async (req, res, next) => {
   }
 };
 export const signup = async (req, res, next) => {
-  const { fullname, username, password, confirmpassword, gender } = req.body;
+  const { fullName, username, password, confirmpassword, gender } = req.body;
+  console.log({ fullName, username, password, confirmpassword, gender });
 
   try {
     if (password !== confirmpassword) {
       return res.status(400).json({ error: "Passwords don't match" });
     }
+    // User.findOne({ username }).timeout(20000);
     const user = await User.findOne({ username });
     if (user) {
       return res.status(400).json({ error: "Username already exits" });
     }
     const boyProfilePic = `https://avatar.iran.liara.run/public/boy?username=${username}`;
-    const girlProfilePic = `https://avatar.iran.liara.run/public/boy?username=${username}`;
+    const girlProfilePic = `https://avatar.iran.liara.run/public/girl?username=${username}`;
     const salt = await bcrypt.genSalt(14);
     const hashedPassword = await bcrypt.hash(password, salt);
 
     const newUser = new User({
-      fullname,
+      fullname: fullName,
       username,
       password: hashedPassword,
       gender,
