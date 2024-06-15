@@ -37,7 +37,7 @@ const useSignup = () => {
         }),
       });
       // const res = await fetch("http://localhost:5000/api/");
-      console.log(res);
+      console.log("res", res);
 
       if (!res.ok) {
         const errorData = await res.json();
@@ -45,7 +45,7 @@ const useSignup = () => {
       }
 
       const data = await res.json();
-      console.log(data);
+      console.log("data", data);
       if (data.error) {
         throw new Error(data.error);
       }

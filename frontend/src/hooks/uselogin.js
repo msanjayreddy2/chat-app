@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useAuthContext } from "../context/AuthContext";
+import useLogout from "./useLogout";
 
 const uselogin = () => {
   const [loading, setLoading] = useState(false);
   const { setAuthUser } = useAuthContext();
-
+  const { logout } = useLogout();
   const login = async ({ username, password }) => {
     setLoading(true);
     try {
@@ -31,6 +32,10 @@ const uselogin = () => {
         throw new Error(data.error);
       }
       localStorage.setItem("user-info", JSON.stringify(data));
+      setTimeout(() => {
+        localStorage.removeItem("user-info");
+        logout();
+      }, 24 * 60 * 60 * 1000);
       setAuthUser(data);
       toast.success("login successful");
     } catch (error) {
